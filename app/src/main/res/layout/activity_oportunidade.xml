@@ -10,8 +10,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -43,7 +44,7 @@
         android:id="@+id/textDescricaoOportunidade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="@dimen/dist_text_bottom"
         android:text="Texto da descrição" />
 
     <TextView
@@ -58,7 +59,7 @@
         android:id="@+id/textLocalOportunidade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="@dimen/dist_text_bottom"
         android:text="Texto do local" />
 
     <LinearLayout
@@ -84,7 +85,7 @@
                 android:id="@+id/textAssuntoOportunidade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/dist_text_bottom"
                 android:text="Texto do assunto" />
 
         </LinearLayout>
@@ -107,7 +108,7 @@
                 android:id="@+id/textTipoOportunidade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/dist_text_bottom"
                 android:text="Texto do tipo" />
         </LinearLayout>
 
@@ -125,7 +126,7 @@
         android:id="@+id/textLinkOportunidade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="@dimen/dist_text_bottom"
         android:text="Texto com o link" />
 
     <LinearLayout
