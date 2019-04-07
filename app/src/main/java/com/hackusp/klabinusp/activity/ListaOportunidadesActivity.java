@@ -1,18 +1,26 @@
 package com.hackusp.klabinusp.activity;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.hackusp.klabinusp.R;
 import com.hackusp.klabinusp.RecyclerItemClickListener;
 import com.hackusp.klabinusp.adapter.AdapterOportunidades;
 import com.hackusp.klabinusp.model.Oportunidade;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +28,8 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<Oportunidade> listaOportunidades = new ArrayList<>();
-    private AdapterOportunidades adapter;
+    private List<Oportunidade> listaSalvos = new ArrayList<>();
+    private AdapterOportunidades adapterOportunidades;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,19 +38,114 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
 
+        swipe();
         configuraRecyclerView();
         obtemOportunidades();
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_oportunidade, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.salvos:
+                Intent i = new Intent(ListaOportunidadesActivity.this, SalvosActivity.class);
+                i.putExtra("listaSalvos", (Serializable) listaSalvos);
+                startActivity(i);
+                break;
+            case R.id.filtrar:
+                Intent in = new Intent(ListaOportunidadesActivity.this, FiltrarActivity.class);
+                startActivity(in);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    public void swipe(){
+
+        ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+
+                int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            //esquerda: não interessado
+            //direita: salvar
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                if(i == ItemTouchHelper.START){
+                    marcarNaoInteressado(viewHolder);
+                }
+                else if(i == ItemTouchHelper.END){
+                    salvarOportunidade(viewHolder);
+                }
+            }
+        };
+
+        new ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerView);
 
     }
 
-    void configuraRecyclerView(){
+    private void salvarOportunidade(RecyclerView.ViewHolder viewHolder){
+
+        int position = viewHolder.getAdapterPosition();
+        Oportunidade oportunidade = listaOportunidades.get(position);
+        listaSalvos.add(oportunidade);
+
+        adapterOportunidades.notifyDataSetChanged();
+
+        Toast.makeText(this, "Oportunidade salva com sucesso!", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void marcarNaoInteressado(RecyclerView.ViewHolder viewHolder){
+
+        final int pos = viewHolder.getAdapterPosition();
+        final Oportunidade oportunidade = listaOportunidades.get(pos);
+        listaOportunidades.remove(pos);
+        adapterOportunidades.notifyDataSetChanged();
+
+        Snackbar.make(viewHolder.itemView, "Marcado como não interessado.", Snackbar.LENGTH_LONG)
+                .setAction("Desfazer", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listaOportunidades.add(pos, oportunidade);
+                        adapterOportunidades.notifyDataSetChanged();
+                        Toast.makeText(ListaOportunidadesActivity.this, "Desfeito.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setActionTextColor(getResources().getColor(R.color.colorPrimary))
+                .show();
+
+    }
+
+    private void configuraRecyclerView(){
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new AdapterOportunidades(listaOportunidades, this);
-        recyclerView.setAdapter(adapter);
+        adapterOportunidades = new AdapterOportunidades(listaOportunidades, this);
+        recyclerView.setAdapter(adapterOportunidades);
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -50,7 +154,7 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                List<Oportunidade> listaOportunidadesAtualizada = adapter.getListaOportunidades();
+                                List<Oportunidade> listaOportunidadesAtualizada = adapterOportunidades.getListaOportunidades();
                                 Oportunidade oportunidadeSelecionada = listaOportunidadesAtualizada.get(position);
 
                                 Intent i = new Intent(ListaOportunidadesActivity.this, OportunidadeActivity.class);
@@ -73,7 +177,7 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
 
     }
 
-    void obtemOportunidades(){
+    private void obtemOportunidades(){
         Oportunidade oportunidade;
 
         oportunidade = new Oportunidade(
@@ -112,6 +216,6 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         );
         listaOportunidades.add(oportunidade);
 
-        adapter.notifyDataSetChanged();
+        adapterOportunidades.notifyDataSetChanged();
     }
 }
