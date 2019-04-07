@@ -9,6 +9,8 @@ import android.widget.Toast;
 import com.hackusp.klabinusp.R;
 import com.hackusp.klabinusp.model.Oportunidade;
 
+import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
+
 public class OportunidadeActivity extends AppCompatActivity {
 
     private Oportunidade oportunidade;
@@ -50,12 +52,31 @@ public class OportunidadeActivity extends AppCompatActivity {
                 textDataOportunidade.setText(oportunidade.getData());
                 textDistanciaOportunidade.setText(oportunidade.getDistancia());
 
+                if(oportunidade.getTipo().equals("ic")){
+                    getSupportActionBar().setTitle("Iniciação científica");
+                }
+                else if(oportunidade.getTipo().equals("estagio")){
+                    getSupportActionBar().setTitle("Estágio");
+                }
+                else if(oportunidade.getTipo().equals("social")){
+                    getSupportActionBar().setTitle("Social");
+                }
+                else if(oportunidade.getTipo().equals("palestra")){
+                    getSupportActionBar().setTitle("Palestra");
+                }
+                else{
+                    getSupportActionBar().setTitle("Oportunidade");
+                }
+
+
                 if(oportunidade.getTipo().equals("ic"))
                     imageOportunidade.setImageResource(R.drawable.pesquisa);
                 else if(oportunidade.getTipo().equals("estagio"))
                     imageOportunidade.setImageResource(R.drawable.estagio);
                 else if(oportunidade.getTipo().equals("palestra"))
                     imageOportunidade.setImageResource(R.drawable.palestra);
+                else if(oportunidade.getTipo().equals("social"))
+                    imageOportunidade.setImageResource(R.drawable.social);
                 else
                     imageOportunidade.setImageResource(R.drawable.ic_padrao_black_24dp);
 

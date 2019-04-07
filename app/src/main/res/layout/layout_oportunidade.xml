@@ -31,8 +31,9 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:text="Título"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
         <TextView

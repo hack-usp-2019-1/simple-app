@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Preencha a senha.", Toast.LENGTH_SHORT).show();
         }
         else{
-            Intent i = new Intent(this, ListaOportunidadesActivity.class);
+            Intent i = new Intent(this, ManchetesActivity.class);
             startActivity(i);
         }
     }

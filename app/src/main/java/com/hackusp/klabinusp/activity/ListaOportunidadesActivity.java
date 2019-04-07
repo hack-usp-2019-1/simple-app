@@ -52,9 +52,15 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
 
         swipe();
-        configuraRetrofit();
         configuraRecyclerView();
         //obtemOportunidades();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        configuraRetrofit();
     }
 
     @Override
@@ -100,24 +106,9 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         recuperaListaRetrofit();
     }
 
-    public void recuperaListaRetrofit(){
-        OportunidadeService service = retrofit.create(OportunidadeService.class);
-        Call<List<Oportunidade>> call = service.recuperarOportunidades();
-
-        call.enqueue(new Callback<List<Oportunidade>>() {
-
-            @Override
-            public void onResponse(Call<List<Oportunidade>> call, Response<List<Oportunidade>> response) {
-                if(response.isSuccessful()){
-                    listaOportunidades = response.body();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Oportunidade>> call, Throwable t) {
-
-            }
-        });
+    private void recuperaListaRetrofit(){
+        MyAsyncTask task = new MyAsyncTask();
+        task.execute();
     }
 
     private void swipe(){
@@ -191,6 +182,8 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        Log.d("TAG", listaOportunidades.toString());
+
         adapterOportunidades = new AdapterOportunidades(listaOportunidades, this);
         recyclerView.setAdapter(adapterOportunidades);
 
@@ -263,7 +256,60 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         );
         listaOportunidades.add(oportunidade);
 
+        oportunidade = new Oportunidade(
+                "Estagio na Klabin",
+                "Só klabins serão aceitos até o fim de 2040.",
+                "Klabin",
+                "estagio",
+                "social",
+                "asdgasdgsag",
+                "03/06/2020",
+                "200 m"
+        );
+        listaOportunidades.add(oportunidade);
+
         adapterOportunidades.notifyDataSetChanged();
+    }
+
+    class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private List<Oportunidade> lista = new ArrayList<>();
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            OportunidadeService service = retrofit.create(OportunidadeService.class);
+            Call<List<Oportunidade>> call = service.recuperarOportunidades();
+
+            try {
+                lista = call.execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //Log.d("TAG", lista.toString());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            listaOportunidades.clear();
+
+            if(lista != null && !lista.isEmpty()){
+                for(Oportunidade prod : lista){
+                    listaOportunidades.add(prod);
+                }
+            }
+            else{
+                Toast.makeText(ListaOportunidadesActivity.this,
+                        "Não foram encontradas oportunidades.",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+            adapterOportunidades.notifyDataSetChanged();
+        }
     }
 
 }

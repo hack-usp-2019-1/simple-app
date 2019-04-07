@@ -47,7 +47,12 @@ public class AdapterOportunidades extends RecyclerView.Adapter<AdapterOportunida
 
         Oportunidade oportunidade = listaOportunidades.get(i);
 
-        myViewHolder.textDescricaoOportunidade.setText(oportunidade.getDescricao());
+        String descricao = oportunidade.getDescricao();
+        if(descricao.length() > 120){
+            descricao = descricao.substring(0, 120) + "...";
+        }
+
+        myViewHolder.textDescricaoOportunidade.setText(descricao);
         myViewHolder.textTituloOportunidade.setText(oportunidade.getTitulo());
         myViewHolder.textDistanciaOportunidade.setText(oportunidade.getDistancia());
         myViewHolder.textDataOportunidade.setText(oportunidade.getData());
@@ -58,6 +63,8 @@ public class AdapterOportunidades extends RecyclerView.Adapter<AdapterOportunida
             myViewHolder.imageOportunidade.setImageResource(R.drawable.estagio);
         else if(oportunidade.getTipo().equals("palestra"))
             myViewHolder.imageOportunidade.setImageResource(R.drawable.palestra);
+        else if(oportunidade.getTipo().equals("social"))
+            myViewHolder.imageOportunidade.setImageResource(R.drawable.social);
         else
             myViewHolder.imageOportunidade.setImageResource(R.drawable.qporaehessa);
 
