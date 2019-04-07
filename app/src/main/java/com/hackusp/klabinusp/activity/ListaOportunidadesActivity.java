@@ -43,6 +43,7 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
     private List<Oportunidade> listaSalvos = new ArrayList<>();
     private AdapterOportunidades adapterOportunidades;
     private Retrofit retrofit;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listaoportunidades);
 
         recyclerView = findViewById(R.id.recyclerView);
+        progressBar = findViewById(R.id.progressBar);
 
         swipe();
         configuraRecyclerView();
@@ -94,7 +96,7 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
     }
 
     private void configuraRetrofit(){
-        String urlAPI = "http://39ea84c5.ngrok.io/api/v1/";
+        String urlAPI = "http://aac88045.ngrok.io/api/v1/";
 
         //Retrofit
         retrofit = new retrofit2.Retrofit.Builder()
@@ -181,6 +183,7 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
     private void configuraRecyclerView(){
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
 
         Log.d("TAG", listaOportunidades.toString());
 
@@ -276,6 +279,13 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         private List<Oportunidade> lista = new ArrayList<>();
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            exibirProgress(true);
+        }
+
+        @Override
         protected Void doInBackground(Void... voids) {
             OportunidadeService service = retrofit.create(OportunidadeService.class);
             Call<List<Oportunidade>> call = service.recuperarOportunidades();
@@ -309,6 +319,12 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
                         .show();
             }
             adapterOportunidades.notifyDataSetChanged();
+            exibirProgress(false);
+        }
+
+        private void exibirProgress(boolean exibirProgress) {
+            progressBar.setVisibility(exibirProgress ? View.VISIBLE : View.GONE);
+            recyclerView.setVisibility(!exibirProgress ? View.VISIBLE : View.GONE);
         }
     }
 

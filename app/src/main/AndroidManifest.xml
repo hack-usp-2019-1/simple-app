@@ -20,7 +20,8 @@
             android:label="Filtros" />
         <activity
             android:name=".activity.SalvosActivity"
-            android:label="Salvos" />
+            android:label="Salvos"
+            android:parentActivityName=".activity.ListaOportunidadesActivity"/>
         <activity
             android:name=".activity.OportunidadeActivity"
             android:parentActivityName=".activity.ListaOportunidadesActivity" />

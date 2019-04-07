@@ -28,6 +28,8 @@ public class SalvosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salvos);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
 
