@@ -59,7 +59,7 @@ public class AdapterOportunidades extends RecyclerView.Adapter<AdapterOportunida
         else if(oportunidade.getTipo().equals("palestra"))
             myViewHolder.imageOportunidade.setImageResource(R.drawable.palestra);
         else
-            myViewHolder.imageOportunidade.setImageResource(R.drawable.ic_padrao_black_24dp);
+            myViewHolder.imageOportunidade.setImageResource(R.drawable.qporaehessa);
 
     }
 

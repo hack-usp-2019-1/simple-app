@@ -1,6 +1,7 @@
 package com.hackusp.klabinusp.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,21 +9,32 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.hackusp.klabinusp.R;
 import com.hackusp.klabinusp.RecyclerItemClickListener;
 import com.hackusp.klabinusp.adapter.AdapterOportunidades;
+import com.hackusp.klabinusp.api.OportunidadeService;
 import com.hackusp.klabinusp.model.Oportunidade;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ListaOportunidadesActivity extends AppCompatActivity {
 
@@ -30,6 +42,7 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
     private List<Oportunidade> listaOportunidades = new ArrayList<>();
     private List<Oportunidade> listaSalvos = new ArrayList<>();
     private AdapterOportunidades adapterOportunidades;
+    private Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +52,9 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
 
         swipe();
+        configuraRetrofit();
         configuraRecyclerView();
-        obtemOportunidades();
-
+        //obtemOportunidades();
     }
 
     @Override
@@ -74,9 +87,40 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void configuraRetrofit(){
+        String urlAPI = "http://39ea84c5.ngrok.io/api/v1/";
 
+        //Retrofit
+        retrofit = new retrofit2.Retrofit.Builder()
+                .baseUrl(urlAPI)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-    public void swipe(){
+        //Recupera valores da API
+        recuperaListaRetrofit();
+    }
+
+    public void recuperaListaRetrofit(){
+        OportunidadeService service = retrofit.create(OportunidadeService.class);
+        Call<List<Oportunidade>> call = service.recuperarOportunidades();
+
+        call.enqueue(new Callback<List<Oportunidade>>() {
+
+            @Override
+            public void onResponse(Call<List<Oportunidade>> call, Response<List<Oportunidade>> response) {
+                if(response.isSuccessful()){
+                    listaOportunidades = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Oportunidade>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void swipe(){
 
         ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
             @Override
@@ -221,4 +265,5 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
 
         adapterOportunidades.notifyDataSetChanged();
     }
+
 }

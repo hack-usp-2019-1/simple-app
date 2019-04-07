@@ -1,16 +1,26 @@
 package com.hackusp.klabinusp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Oportunidade implements Serializable {
 
+    @SerializedName("titulo")
     private String titulo;
+    @SerializedName("descricao")
     private String descricao;
+    @SerializedName("local")
     private String local;
+    @SerializedName("assunto")
     private String assunto;
+    @SerializedName("tipo")
     private String tipo;
+    @SerializedName("link")
     private String link;
+    @SerializedName("data")
     private String data;
+    @SerializedName("distancia")
     private String distancia;
 
     public Oportunidade(String titulo, String descricao, String local, String assunto, String tipo, String link, String data, String distancia) {
