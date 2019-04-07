@@ -6,6 +6,7 @@
     <color name="cor_primaria_fundo">#2378AD</color>
     <color name="cor_topicos">#e14444</color>
     <color name="cor_secundaria_fundo">#5E97BB</color>
+    <color name="cor_terciaria_fundo">#9EB6C6</color>
     <color name="cor_escrita_primaria">#ededed</color>
     <color name="cor_topico_fundo_branco">#282626</color>
     <color name="cor_subtopico_fundo_branco">#706d6d</color>

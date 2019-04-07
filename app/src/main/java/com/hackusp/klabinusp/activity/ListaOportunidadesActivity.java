@@ -185,8 +185,6 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        Log.d("TAG", listaOportunidades.toString());
-
         adapterOportunidades = new AdapterOportunidades(listaOportunidades, this);
         recyclerView.setAdapter(adapterOportunidades);
 
@@ -295,8 +293,6 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            //Log.d("TAG", lista.toString());
 
             return null;
         }
