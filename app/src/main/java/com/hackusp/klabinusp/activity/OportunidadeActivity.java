@@ -2,6 +2,7 @@ package com.hackusp.klabinusp.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ public class OportunidadeActivity extends AppCompatActivity {
     private TextView textTituloOportunidade, textDescricaoOportunidade, textLocalOportunidade,
             textAssuntoOportunidade, textTipoOportunidade, textLinkOportunidade,
             textDataOportunidade, textDistanciaOportunidade;
+    private ImageView imageOportunidade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class OportunidadeActivity extends AppCompatActivity {
         textLinkOportunidade = findViewById(R.id.textLinkOportunidade);
         textDataOportunidade = findViewById(R.id.textDataOportunidade);
         textDistanciaOportunidade = findViewById(R.id.textDistanciaOportunidade);
+        imageOportunidade = findViewById(R.id.imageOportunidade);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -47,12 +50,19 @@ public class OportunidadeActivity extends AppCompatActivity {
                 textDataOportunidade.setText(oportunidade.getData());
                 textDistanciaOportunidade.setText(oportunidade.getDistancia());
 
+                if(oportunidade.getTipo().equals("ic"))
+                    imageOportunidade.setImageResource(R.drawable.pesquisa);
+                else if(oportunidade.getTipo().equals("estagio"))
+                    imageOportunidade.setImageResource(R.drawable.estagio);
+                else if(oportunidade.getTipo().equals("palestra"))
+                    imageOportunidade.setImageResource(R.drawable.palestra);
+                else
+                    imageOportunidade.setImageResource(R.drawable.ic_padrao_black_24dp);
+
             }
             else{
-
                 Toast.makeText(this, "Erro ao enviar a oportunidade. Tente novamente.", Toast.LENGTH_SHORT).show();
                 finish();
-
             }
         }
 

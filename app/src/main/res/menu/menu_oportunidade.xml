@@ -12,5 +12,11 @@
         android:title="Filtrar"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/criarOportunidades"
+        android:title="Filtrar"
+        app:showAsAction="never"
+        android:visible="false"
+        />
 
 </menu>

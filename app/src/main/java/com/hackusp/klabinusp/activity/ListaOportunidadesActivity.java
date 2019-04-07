@@ -66,6 +66,9 @@ public class ListaOportunidadesActivity extends AppCompatActivity {
                 Intent in = new Intent(ListaOportunidadesActivity.this, FiltrarActivity.class);
                 startActivity(in);
                 break;
+            case R.id.criarOportunidades:
+                Toast.makeText(this, "Criar oport", Toast.LENGTH_SHORT).show();
+                break;
         }
 
         return super.onOptionsItemSelected(item);

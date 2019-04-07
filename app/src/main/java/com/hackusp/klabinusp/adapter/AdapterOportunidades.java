@@ -53,11 +53,11 @@ public class AdapterOportunidades extends RecyclerView.Adapter<AdapterOportunida
         myViewHolder.textDataOportunidade.setText(oportunidade.getData());
 
         if(oportunidade.getTipo().equals("ic"))
-            myViewHolder.imageOportunidade.setImageResource(R.drawable.ic_ic_black_24dp);
+            myViewHolder.imageOportunidade.setImageResource(R.drawable.pesquisa);
         else if(oportunidade.getTipo().equals("estagio"))
-            myViewHolder.imageOportunidade.setImageResource(R.drawable.ic_estagio_black_24dp);
+            myViewHolder.imageOportunidade.setImageResource(R.drawable.estagio);
         else if(oportunidade.getTipo().equals("palestra"))
-            myViewHolder.imageOportunidade.setImageResource(R.drawable.ic_palestra_black_24dp);
+            myViewHolder.imageOportunidade.setImageResource(R.drawable.palestra);
         else
             myViewHolder.imageOportunidade.setImageResource(R.drawable.ic_padrao_black_24dp);
 
